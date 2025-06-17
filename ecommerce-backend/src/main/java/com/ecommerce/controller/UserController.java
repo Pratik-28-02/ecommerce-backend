@@ -1,9 +1,10 @@
-package com.ecommerece.controller;
+package com.ecommerce.controller;
 
-import com.ecommerece.model.User;
-import com.ecommerece.repository.UserRepository;
+import com.ecommerce.model.User;
+import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +16,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
     @PostMapping
     public User createUser(@RequestBody User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
     @GetMapping("/{id}")

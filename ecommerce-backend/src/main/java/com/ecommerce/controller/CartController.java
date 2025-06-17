@@ -1,7 +1,7 @@
-package com.ecommerece.controller;
+package com.ecommerce.controller;
 
-import com.ecommerece.repository.CartRepository;
-import com.ecommerece.model.Cart;
+import com.ecommerce.repository.CartRepository;
+import com.ecommerce.model.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

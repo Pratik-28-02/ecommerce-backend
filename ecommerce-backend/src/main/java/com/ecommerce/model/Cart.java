@@ -1,21 +1,19 @@
-package com.ecommerece.model;
+package com.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "order_items")
+@Table(name = "carts")
 @Data
-public class OrderItem {
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -23,7 +21,4 @@ public class OrderItem {
 
     @Column(nullable = false)
     private int quantity;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
 }

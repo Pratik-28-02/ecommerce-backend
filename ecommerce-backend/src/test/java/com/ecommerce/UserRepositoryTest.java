@@ -1,7 +1,7 @@
-package com.ecommerece;
+package com.ecommerce;
 
-import com.ecommerece.model.User;
-import com.ecommerece.repository.UserRepository;
+import com.ecommerce.model.User;
+import com.ecommerce.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
