@@ -2,9 +2,11 @@ package com.ecommerce.controller;
 
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
+import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +19,13 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public List<User> getAllUsers(){
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
     @PostMapping
     public User createUser(@RequestBody User user){
@@ -33,5 +37,10 @@ public class UserController {
         Optional <User> user = userRepository.findById(id);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("/me")
+    public User getCurrentUser(Authentication auth){
+        String userId = auth.getName();
+        return userService.getCurrentUser(Long.parseLong(userId));
     }
 }

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    List<Cart> findByUserId(Long userId);
-    void deleteByUserID(Long userId);
+    List<Cart> findByUser_Id(Long id);
+    void deleteByUser_Id(Long id);
 }

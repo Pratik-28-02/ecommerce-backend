@@ -1,41 +1,50 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.model.Product;
-import com.ecommerce.repository.ProductRepository;
+import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/products")
+@RequestMapping("/api/products")
 public class ProductController {
     @Autowired
-    private ProductRepository productRepository;
-
-    @GetMapping
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
-    }
+    private ProductService productService;
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product){
-        return productRepository.save(product);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product createProduct(
+            @RequestPart("name") String name,
+            @RequestPart(value = "description", required = false) String description,
+            @RequestPart("price") String price,
+            @RequestPart("stock") String stock,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return productService.createProduct(name, description, new BigDecimal(price), Integer.parseInt(stock), image);
     }
-    @PostMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id,@RequestBody Product product){
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if(existingProduct.isPresent()){
-            Product updatedProduct = existingProduct.get();
-            updatedProduct.setName(product.getName());
-            updatedProduct.setDescription(product.getDescription());
-            updatedProduct.setPrice(product.getPrice());
-            updatedProduct.setStock(product.getStock());
-            Product savedProduct = productRepository.save(updatedProduct);
-            return ResponseEntity.ok(savedProduct);
-        }
-        return ResponseEntity.notFound().build();
+
+    @PutMapping("/{id}")
+    public Product updateProduct(
+            @PathVariable Long id,
+            @RequestPart(value = "name", required = false) String name,
+            @RequestPart(value = "description", required = false) String description,
+            @RequestPart(value = "price", required = false) String price,
+            @RequestPart(value = "stock", required = false) String stock,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return productService.updateProduct(id, name, description,
+                price != null ? new BigDecimal(price) : null,
+                stock != null ? Integer.parseInt(stock) : -1, image);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
     }
 }

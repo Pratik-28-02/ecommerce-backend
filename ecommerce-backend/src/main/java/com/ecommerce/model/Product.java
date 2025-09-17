@@ -16,7 +16,7 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -24,4 +24,7 @@ public class Product {
 
     @Column(nullable = false)
     private int stock;
+
+    @Column
+    private String imageUrl;
 }
